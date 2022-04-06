@@ -1,7 +1,9 @@
+import 'package:ai_barcode/ai_barcode.dart';
 import 'package:dencode/constant/image_path.dart';
 import 'package:dencode/controller/date_time.dart';
 import 'package:dencode/widgets/fab_btn.dart';
 import 'package:dencode/widgets/image_icons.dart';
+import 'package:dencode/widgets/show_qr_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,6 +16,8 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final DateTimeController date = DateTimeController();
+  final ShowPopUp showPopUp = ShowPopUp();
+  final CreatorController creatorController = CreatorController();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -55,12 +59,23 @@ class _HomeState extends State<Home> {
                   children: [
                     Row(
                       children: [
-                        Container(
-                          height: 40,
-                          width: 40,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image: AssetImage(ImagePath.kQrCode),
+                        InkWell(
+                          onTap: () {
+                            showPopUp.qrViewPopUp(
+                              data: "data",
+                              context: context,
+                              width: width,
+                              height: height,
+                              creatorController: creatorController,
+                            );
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 40,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(ImagePath.kQrCode),
+                              ),
                             ),
                           ),
                         ),
@@ -76,13 +91,13 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         const Spacer(),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const AssetsIcons(imagePath: ImagePath.kShare),
-                          padding: EdgeInsets.zero,
-                          constraints: const BoxConstraints(),
-                        ),
-                        const SizedBox(width: 10),
+                        // IconButton(
+                        //   onPressed: () {},
+                        //   icon: const AssetsIcons(imagePath: ImagePath.kShare),
+                        //   padding: EdgeInsets.zero,
+                        //   constraints: const BoxConstraints(),
+                        // ),
+                        // const SizedBox(width: 10),
                         IconButton(
                           onPressed: () {},
                           icon: const AssetsIcons(imagePath: ImagePath.kDelete),
