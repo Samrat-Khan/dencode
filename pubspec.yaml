@@ -19,6 +19,8 @@ dependencies:
   google_fonts: ^2.3.1
   iconsax: ^0.0.8
   intl: ^0.17.0
+  loading_animation_widget: ^1.1.0+3
+  permission_handler: ^9.2.0
   speed_dial_fab: ^2.1.1
   unicons: ^2.0.2
 
@@ -31,3 +33,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icons/
+    - assets/bg/

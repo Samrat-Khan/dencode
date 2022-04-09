@@ -91,13 +91,6 @@ class _HomeState extends State<Home> {
                           ),
                         ),
                         const Spacer(),
-                        // IconButton(
-                        //   onPressed: () {},
-                        //   icon: const AssetsIcons(imagePath: ImagePath.kShare),
-                        //   padding: EdgeInsets.zero,
-                        //   constraints: const BoxConstraints(),
-                        // ),
-                        // const SizedBox(width: 10),
                         IconButton(
                           onPressed: () {},
                           icon: const AssetsIcons(imagePath: ImagePath.kDelete),

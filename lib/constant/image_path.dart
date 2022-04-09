@@ -1,10 +1,13 @@
 class ImagePath {
-  static const _basePath = 'assets/icons';
-  static const kDonate = '$_basePath/care.png';
-  static const kDownload = '$_basePath/download.png';
-  static const kGallery = '$_basePath/img-file.png';
-  static const kScan = '$_basePath/scan.png';
-  static const kShare = '$_basePath/share.png';
-  static const kDelete = '$_basePath/trash.png';
-  static const kQrCode = '$_basePath/qr-code.png';
+  static const _baseIconPath = 'assets/icons';
+  static const _baseBgPath = 'assets/bg';
+  static const kDonate = '$_baseIconPath/care.png';
+  static const kDownload = '$_baseIconPath/download.png';
+  static const kGallery = '$_baseIconPath/img-file.png';
+  static const kScan = '$_baseIconPath/scan.png';
+  static const kShare = '$_baseIconPath/share.png';
+  static const kDelete = '$_baseIconPath/trash.png';
+  static const kQrCode = '$_baseIconPath/qr-code.png';
+
+  static const kNoPermissionBg = '$_baseBgPath/no-permission.png';
 }
