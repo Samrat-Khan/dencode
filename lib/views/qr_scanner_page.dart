@@ -1,14 +1,15 @@
 import 'package:ai_barcode/ai_barcode.dart';
 import 'package:dencode/constant/image_path.dart';
 import 'package:dencode/constant/permission_message.dart';
+import 'package:dencode/controller/db_controller.dart';
 import 'package:dencode/controller/permission_controller.dart';
+import 'package:dencode/db/qr_data.dart';
 import 'package:dencode/views/home.dart';
 import 'package:dencode/widgets/loader.dart';
 import 'package:dencode/widgets/route_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class QrScannerPage extends StatefulWidget {
   const QrScannerPage({Key? key}) : super(key: key);
@@ -20,12 +21,18 @@ class QrScannerPage extends StatefulWidget {
 class _QrScannerPageState extends State<QrScannerPage>
     with WidgetsBindingObserver {
   late ScannerController _scannerController;
-
+  final DbController dbController = DbController();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addObserver(this);
     _scannerController = ScannerController(scannerResult: (result) {
+      dbController.addQrResult(
+        data: QrData(
+            qrData: result,
+            dateStamp: DateTime.now(),
+            uuid: DateTime.now().microsecondsSinceEpoch),
+      );
       _resultCallback(result);
     }, scannerViewCreated: () {
       TargetPlatform platform = Theme.of(context).platform;

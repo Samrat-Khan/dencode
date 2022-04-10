@@ -1,4 +1,4 @@
-package com.samratkhan.dencode.dencode
+package com.samrat.magicqr
 
 import io.flutter.embedding.android.FlutterActivity
 

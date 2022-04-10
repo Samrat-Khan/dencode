@@ -23,11 +23,17 @@ dependencies:
   permission_handler: ^9.2.0
   speed_dial_fab: ^2.1.1
   unicons: ^2.0.2
+  hive: ^2.1.0
+  hive_flutter: ^1.1.0
+
 
 dev_dependencies:
   flutter_lints: ^1.0.0
+  hive_generator: ^1.1.2
+  build_runner: ^2.1.8
   flutter_test:
     sdk: flutter
+  change_app_package_name: ^1.0.0
 
 flutter:
   uses-material-design: true

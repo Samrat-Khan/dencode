@@ -1,8 +1,15 @@
+import 'package:dencode/constant/hive_box_name.dart';
+import 'package:dencode/db/qr_data.dart';
 import 'package:dencode/views/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(QrDataAdapter());
+  await Hive.openBox<QrData>(HiveBoxName.kQrDataBox);
   runApp(const MyApp());
 }
 
@@ -19,6 +26,7 @@ class MyApp extends StatelessWidget {
     );
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: "Magic QR",
       home: Home(),
     );
   }

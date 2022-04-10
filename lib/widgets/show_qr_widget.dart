@@ -40,7 +40,7 @@ class ShowPopUp {
                       visible: controller.isVisibleQrCode.value,
                       child: PlatformAiBarcodeCreatorWidget(
                         creatorController: creatorController,
-                        initialValue: 'Samrat',
+                        initialValue: data,
                       ),
                       replacement: const Padding(
                         padding: EdgeInsets.all(25),
