@@ -10,4 +10,5 @@ class ImagePath {
   static const kQrCode = '$_baseIconPath/qr-code.png';
 
   static const kNoPermissionBg = '$_baseBgPath/no-permission.png';
+  static const kNoData = '$_baseBgPath/no-data.png';
 }

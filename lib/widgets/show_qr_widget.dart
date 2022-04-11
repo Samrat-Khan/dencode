@@ -23,6 +23,8 @@ class ShowPopUp {
             borderRadius: BorderRadius.circular(10),
           ),
           elevation: 5,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           children: [
             Container(
               width: width,
@@ -49,6 +51,14 @@ class ShowPopUp {
                     );
                   },
                 ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              data,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.poppins(
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],

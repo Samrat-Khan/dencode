@@ -12,8 +12,8 @@ class Home extends StatelessWidget {
       extendBody: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
+        // elevation: 0,
+        backgroundColor: Colors.white,
         centerTitle: false,
         title: Text(
           "Magic QR",

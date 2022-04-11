@@ -1,14 +1,8 @@
 import 'dart:async';
 
-import 'package:get/get.dart';
+import 'package:get/state_manager.dart';
 
 class PopUpController extends GetxController {
-  @override
-  void onClose() {
-    isVisibleQrCode.value = false;
-    super.onClose();
-  }
-
   RxBool isVisibleQrCode = false.obs;
   showQrCode() {
     Future.delayed(
