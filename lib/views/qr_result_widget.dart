@@ -37,6 +37,7 @@ class QrResultWidget extends StatelessWidget {
                   final result = qrResult.getAt(i);
                   return Card(
                     elevation: 5,
+                    color: Color(result!.colorCode),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -54,7 +55,7 @@ class QrResultWidget extends StatelessWidget {
                               InkWell(
                                 onTap: () {
                                   showPopUp.qrViewPopUp(
-                                    data: result!.qrData,
+                                    data: result.qrData,
                                     context: context,
                                     width: width,
                                     height: height,
@@ -75,9 +76,10 @@ class QrResultWidget extends StatelessWidget {
                               SizedBox(
                                 width: width * 0.6,
                                 child: Text(
-                                  result!.qrData,
+                                  result.qrData,
                                   style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
+                                    color: Colors.white,
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 2,
@@ -96,7 +98,7 @@ class QrResultWidget extends StatelessWidget {
                             ],
                           ),
                           const Divider(
-                            color: Colors.black,
+                            color: Colors.white,
                             thickness: 0.5,
                           ),
                           Row(
@@ -108,6 +110,7 @@ class QrResultWidget extends StatelessWidget {
                                 ),
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w500,
+                                  color: Colors.white,
                                 ),
                               ),
                               Text(
@@ -116,6 +119,7 @@ class QrResultWidget extends StatelessWidget {
                                 ),
                                 style: GoogleFonts.poppins(
                                   fontWeight: FontWeight.w500,
+                                  color: Colors.white,
                                 ),
                               ),
                             ],

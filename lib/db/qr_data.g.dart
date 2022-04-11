@@ -20,19 +20,22 @@ class QrDataAdapter extends TypeAdapter<QrData> {
       qrData: fields[0] as String,
       dateStamp: fields[1] as DateTime,
       uuid: fields[2] as int,
+      colorCode: fields[3] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, QrData obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.qrData)
       ..writeByte(1)
       ..write(obj.dateStamp)
       ..writeByte(2)
-      ..write(obj.uuid);
+      ..write(obj.uuid)
+      ..writeByte(3)
+      ..write(obj.colorCode);
   }
 
   @override

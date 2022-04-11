@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:ai_barcode/ai_barcode.dart';
+import 'package:dencode/constant/color_codes.dart';
 import 'package:dencode/constant/image_path.dart';
 import 'package:dencode/constant/permission_message.dart';
 import 'package:dencode/controller/db_controller.dart';
@@ -22,6 +25,7 @@ class _QrScannerPageState extends State<QrScannerPage>
     with WidgetsBindingObserver {
   late ScannerController _scannerController;
   final DbController dbController = DbController();
+  Random ran = Random();
   @override
   void initState() {
     super.initState();
@@ -29,9 +33,12 @@ class _QrScannerPageState extends State<QrScannerPage>
     _scannerController = ScannerController(scannerResult: (result) {
       dbController.addQrResult(
         data: QrData(
-            qrData: result,
-            dateStamp: DateTime.now(),
-            uuid: DateTime.now().microsecondsSinceEpoch),
+          qrData: result,
+          dateStamp: DateTime.now(),
+          uuid: DateTime.now().microsecondsSinceEpoch,
+          colorCode: ColorCodes
+              .kColorCodes[ran.nextInt(ColorCodes.kColorCodes.length)],
+        ),
       );
       _resultCallback(result);
     }, scannerViewCreated: () {
@@ -72,43 +79,43 @@ class _QrScannerPageState extends State<QrScannerPage>
 
   _resultCallback(String result) {
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (ctx) {
-        return SimpleDialog(
-          title: Text(
-            "Result",
-            style: GoogleFonts.poppins(),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 10,
-            vertical: 10,
-          ),
-          children: [
-            Center(
-              child: SelectableText(
+        return StatefulBuilder(builder: (context, state) {
+          return SimpleDialog(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 10,
+            ),
+            children: [
+              SelectableText(
                 result,
                 textAlign: TextAlign.left,
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).pushReplacement(
-                    createRoute(
-                      nextPage: const Home(),
-                    ),
-                  );
-                },
-                child: Text(
-                  "Done",
-                  style: GoogleFonts.poppins(),
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
                 ),
               ),
-            ),
-          ],
-        );
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 40,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      createRoute(
+                        nextPage: Home(),
+                      ),
+                    );
+                  },
+                  child: Text(
+                    "Done",
+                    style: GoogleFonts.poppins(),
+                  ),
+                ),
+              ),
+            ],
+          );
+        });
       },
     );
   }

@@ -11,4 +11,5 @@ class ImagePath {
 
   static const kNoPermissionBg = '$_baseBgPath/no-permission.png';
   static const kNoData = '$_baseBgPath/no-data.png';
+  static const kAppIcon = '$_baseIconPath/icon.png';
 }

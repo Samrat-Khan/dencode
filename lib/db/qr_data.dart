@@ -12,9 +12,14 @@ class QrData {
 
   @HiveField(2)
   final int uuid;
+
+  @HiveField(3)
+  final int colorCode;
+
   QrData({
     required this.qrData,
     required this.dateStamp,
     required this.uuid,
+    required this.colorCode,
   });
 }

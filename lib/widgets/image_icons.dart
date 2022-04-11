@@ -15,6 +15,7 @@ class AssetsIcons extends StatelessWidget {
     return ImageIcon(
       AssetImage(imagePath),
       size: size,
+       color: Colors.white,
     );
   }
 }

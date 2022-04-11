@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         DeviceOrientation.portraitUp,
       ],
     );
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Magic QR",
       home: Home(),
