@@ -1,5 +1,5 @@
 import 'package:dencode/constant/image_path.dart';
-import 'package:dencode/views/qr_scanner_page.dart';
+import 'package:dencode/views/qr_scanner/qr_scanner_page.dart';
 import 'package:dencode/widgets/image_icons.dart';
 import 'package:dencode/widgets/route_animation.dart';
 import 'package:flutter/material.dart';

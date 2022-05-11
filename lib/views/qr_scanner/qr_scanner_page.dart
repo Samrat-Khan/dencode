@@ -7,7 +7,7 @@ import 'package:dencode/constant/permission_message.dart';
 import 'package:dencode/controller/db_controller.dart';
 import 'package:dencode/controller/permission_controller.dart';
 import 'package:dencode/db/qr_data.dart';
-import 'package:dencode/views/home.dart';
+import 'package:dencode/views/home/home.dart';
 import 'package:dencode/widgets/loader.dart';
 import 'package:dencode/widgets/route_animation.dart';
 import 'package:flutter/material.dart';
