@@ -1,7 +1,5 @@
 import 'package:ai_barcode/ai_barcode.dart';
-import 'package:dencode/constant/image_path.dart';
 import 'package:dencode/controller/pop_up_controller.dart';
-import 'package:dencode/widgets/image_icons.dart';
 import 'package:dencode/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -7,12 +7,13 @@ import 'package:get/get.dart';
 class NavigationController extends GetxController {
   List<Widget> pages = [
     QrResultWidget(),
-    const QrGenerate(),
+    QrGenerate(),
     const Settings(),
   ];
+
   PageController pageController =
-      PageController(initialPage: 0, keepPage: true);
-  int currentPage = 0;
+      PageController(initialPage: 1, keepPage: true);
+  int currentPage = 1;
   changePage(int index) {
     currentPage = index;
     pageController.animateToPage(index,
@@ -23,7 +24,8 @@ class NavigationController extends GetxController {
 
   @override
   void onClose() {
-    super.onClose();
     pageController.dispose();
+
+    super.onClose();
   }
 }

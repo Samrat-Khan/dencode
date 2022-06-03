@@ -29,7 +29,7 @@ class _QrScannerPageState extends State<QrScannerPage>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance!.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _scannerController = ScannerController(scannerResult: (result) {
       dbController.addQrResult(
         data: QrData(
@@ -57,7 +57,7 @@ class _QrScannerPageState extends State<QrScannerPage>
 
   @override
   void dispose() {
-    WidgetsBinding.instance!.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _scannerController.stopCameraPreview();
     _scannerController.stopCamera();
     super.dispose();

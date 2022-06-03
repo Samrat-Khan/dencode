@@ -1,6 +1,4 @@
 import 'package:dencode/controller/navigation_controller.dart';
-import 'package:dencode/views/qr_generate/qr_generate.dart';
-import 'package:dencode/views/qr_result/qr_result_widget.dart';
 import 'package:dencode/widgets/app_drawer.dart';
 import 'package:dencode/widgets/fab_btn.dart';
 import 'package:flutter/material.dart';
