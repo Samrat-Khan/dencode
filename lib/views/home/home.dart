@@ -55,25 +55,29 @@ class Home extends StatelessWidget {
               ),
             ),
             floatingActionButton: const FabBtn(),
-            bottomNavigationBar: SalomonBottomBar(
-              currentIndex: controller.currentPage,
-              onTap: (i) {
-                controller.changePage(i);
-              },
-              items: [
-                SalomonBottomBarItem(
-                  icon: const Icon(Icons.qr_code_scanner_outlined),
-                  title: const Text("Scan"),
-                ),
-                SalomonBottomBarItem(
-                  icon: const Icon(Icons.qr_code_rounded),
-                  title: const Text("Generate"),
-                ),
-                SalomonBottomBarItem(
-                  icon: const Icon(Icons.settings),
-                  title: const Text("Settings"),
-                ),
-              ],
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
+              child: SalomonBottomBar(
+                
+                currentIndex: controller.currentPage,
+                onTap: (i) {
+                  controller.changePage(i);
+                },
+                items: [
+                  SalomonBottomBarItem(
+                    icon: const Icon(Icons.qr_code_scanner_outlined),
+                    title: const Text("Scan"),
+                  ),
+                  SalomonBottomBarItem(
+                    icon: const Icon(Icons.qr_code_rounded),
+                    title: const Text("Generate"),
+                  ),
+                  SalomonBottomBarItem(
+                    icon: const Icon(Icons.settings),
+                    title: const Text("Settings"),
+                  ),
+                ],
+              ),
             ),
           );
         });
