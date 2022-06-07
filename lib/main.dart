@@ -28,48 +28,48 @@ class MyApp extends StatelessWidget {
         DeviceOrientation.portraitUp,
       ],
     );
-    return MaterialApp(
-      theme: FlexThemeData.light(
-        scheme: FlexScheme.outerSpace,
-        surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-        blendLevel: 20,
-        appBarOpacity: 0.95,
-        subThemesData: const FlexSubThemesData(
-          blendOnLevel: 20,
-          blendOnColors: false,
-          switchSchemeColor: SchemeColor.secondaryContainer,
-          checkboxSchemeColor: SchemeColor.secondaryContainer,
-          radioSchemeColor: SchemeColor.secondaryContainer,
-          inputDecoratorRadius: 25.0,
-          navigationRailLabelType: NavigationRailLabelType.selected,
-        ),
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: true,
-        // To use the playground font, add GoogleFonts package and uncomment
-        // fontFamily: GoogleFonts.notoSans().fontFamily,
-      ),
-      darkTheme: FlexThemeData.dark(
-        scheme: FlexScheme.outerSpace,
-        surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
-        blendLevel: 15,
-        appBarStyle: FlexAppBarStyle.background,
-        appBarOpacity: 0.90,
-        subThemesData: const FlexSubThemesData(
-          blendOnLevel: 30,
-          switchSchemeColor: SchemeColor.secondaryContainer,
-          checkboxSchemeColor: SchemeColor.secondaryContainer,
-          radioSchemeColor: SchemeColor.secondaryContainer,
-          inputDecoratorRadius: 25.0,
-          navigationRailLabelType: NavigationRailLabelType.selected,
-        ),
-        visualDensity: FlexColorScheme.comfortablePlatformDensity,
-        useMaterial3: true,
-        // To use the playground font, add GoogleFonts package and uncomment
-        // fontFamily: GoogleFonts.notoSans().fontFamily,
-      ),
-// If you do not have a themeMode switch, uncomment this line
-// to let the device system mode control the theme mode:
-      themeMode: ThemeMode.system,
+    return const MaterialApp(
+//       theme: FlexThemeData.light(
+//         scheme: FlexScheme.outerSpace,
+//         surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
+//         blendLevel: 20,
+//         appBarOpacity: 0.95,
+//         subThemesData: const FlexSubThemesData(
+//           blendOnLevel: 20,
+//           blendOnColors: false,
+//           switchSchemeColor: SchemeColor.secondaryContainer,
+//           checkboxSchemeColor: SchemeColor.secondaryContainer,
+//           radioSchemeColor: SchemeColor.secondaryContainer,
+//           inputDecoratorRadius: 25.0,
+//           navigationRailLabelType: NavigationRailLabelType.selected,
+//         ),
+//         visualDensity: FlexColorScheme.comfortablePlatformDensity,
+//         useMaterial3: true,
+//         // To use the playground font, add GoogleFonts package and uncomment
+//         // fontFamily: GoogleFonts.notoSans().fontFamily,
+//       ),
+//       darkTheme: FlexThemeData.dark(
+//         scheme: FlexScheme.outerSpace,
+//         surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
+//         blendLevel: 15,
+//         appBarStyle: FlexAppBarStyle.background,
+//         appBarOpacity: 0.90,
+//         subThemesData: const FlexSubThemesData(
+//           blendOnLevel: 30,
+//           switchSchemeColor: SchemeColor.secondaryContainer,
+//           checkboxSchemeColor: SchemeColor.secondaryContainer,
+//           radioSchemeColor: SchemeColor.secondaryContainer,
+//           inputDecoratorRadius: 25.0,
+//           navigationRailLabelType: NavigationRailLabelType.selected,
+//         ),
+//         visualDensity: FlexColorScheme.comfortablePlatformDensity,
+//         useMaterial3: true,
+//         // To use the playground font, add GoogleFonts package and uncomment
+//         // fontFamily: GoogleFonts.notoSans().fontFamily,
+//       ),
+// // If you do not have a themeMode switch, uncomment this line
+// // to let the device system mode control the theme mode:
+//       themeMode: ThemeMode.system,
 
       debugShowCheckedModeBanner: false,
       title: "Magic QR",
