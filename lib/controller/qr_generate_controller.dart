@@ -1,10 +1,10 @@
-import 'package:ai_barcode/ai_barcode.dart';
+// import 'package:ai_barcode/ai_barcode.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class QrGenerateController extends GetxController {
-  CreatorController qrCreatorController = CreatorController();
+  // CreatorController qrCreatorController = CreatorController();
   TextEditingController? qrGenerateTextEditingController;
   String initValue = "Magic QR";
   List<int> colorCode = [

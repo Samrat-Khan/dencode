@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:ai_barcode/ai_barcode.dart';
 import 'package:dencode/constant/color_codes.dart';
 import 'package:dencode/constant/image_path.dart';
 import 'package:dencode/constant/permission_message.dart';
@@ -13,6 +12,7 @@ import 'package:dencode/widgets/route_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QrScannerPage extends StatefulWidget {
   const QrScannerPage({Key? key}) : super(key: key);
@@ -23,43 +23,43 @@ class QrScannerPage extends StatefulWidget {
 
 class _QrScannerPageState extends State<QrScannerPage>
     with WidgetsBindingObserver {
-  late ScannerController _scannerController;
+  // late ScannerController _scannerController;
   final DbController dbController = DbController();
   Random ran = Random();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _scannerController = ScannerController(scannerResult: (result) {
-      dbController.addQrResult(
-        data: QrData(
-          qrData: result,
-          dateStamp: DateTime.now(),
-          uuid: DateTime.now().microsecondsSinceEpoch,
-          colorCode: ColorCodes
-              .kColorCodes[ran.nextInt(ColorCodes.kColorCodes.length)],
-        ),
-      );
-      _resultCallback(result);
-    }, scannerViewCreated: () {
-      TargetPlatform platform = Theme.of(context).platform;
-      if (TargetPlatform.iOS == platform) {
-        Future.delayed(const Duration(seconds: 2), () {
-          _scannerController.startCamera();
-          _scannerController.startCameraPreview();
-        });
-      } else {
-        _scannerController.startCamera();
-        _scannerController.startCameraPreview();
-      }
-    });
+    // _scannerController = ScannerController(scannerResult: (result) {
+    //   dbController.addQrResult(
+    //     data: QrData(
+    //       qrData: result,
+    //       dateStamp: DateTime.now(),
+    //       uuid: DateTime.now().microsecondsSinceEpoch,
+    //       colorCode: ColorCodes
+    //           .kColorCodes[ran.nextInt(ColorCodes.kColorCodes.length)],
+    //     ),
+    //   );
+    //   _resultCallback(result);
+    // }, scannerViewCreated: () {
+    //   TargetPlatform platform = Theme.of(context).platform;
+    //   if (TargetPlatform.iOS == platform) {
+    //     Future.delayed(const Duration(seconds: 2), () {
+    //       _scannerController.startCamera();
+    //       _scannerController.startCameraPreview();
+    //     });
+    //   } else {
+    //     _scannerController.startCamera();
+    //     _scannerController.startCameraPreview();
+    //   }
+    // });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    _scannerController.stopCameraPreview();
-    _scannerController.stopCamera();
+    // _scannerController.stopCameraPreview();
+    // _scannerController.stopCamera();
     super.dispose();
   }
 
@@ -82,40 +82,42 @@ class _QrScannerPageState extends State<QrScannerPage>
       barrierDismissible: false,
       context: context,
       builder: (ctx) {
-        return StatefulBuilder(builder: (context, state) {
-          return SimpleDialog(
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 10,
-              vertical: 10,
-            ),
-            children: [
-              SelectableText(
-                result,
-                textAlign: TextAlign.left,
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                ),
+        return StatefulBuilder(
+          builder: (context, state) {
+            return SimpleDialog(
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 10,
+                vertical: 10,
               ),
-              const SizedBox(height: 10),
-              SizedBox(
-                height: 40,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      createRoute(
-                        nextPage: Home(),
-                      ),
-                    );
-                  },
-                  child: Text(
-                    "Done",
-                    style: GoogleFonts.poppins(),
+              children: [
+                SelectableText(
+                  result,
+                  textAlign: TextAlign.left,
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
                   ),
                 ),
-              ),
-            ],
-          );
-        });
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 40,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushReplacement(
+                        createRoute(
+                          nextPage: Home(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "Done",
+                      style: GoogleFonts.poppins(),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
       },
     );
   }
@@ -139,8 +141,8 @@ class _QrScannerPageState extends State<QrScannerPage>
                       size: MediaQuery.of(context).size,
                       controller: controller,
                     )
-                  : PlatformAiBarcodeScannerWidget(
-                      platformScannerController: _scannerController,
+                  : MobileScanner(
+                      onDetect: (code, args) {},
                     );
         },
       ),

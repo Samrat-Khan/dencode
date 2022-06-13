@@ -30,6 +30,7 @@ class Home extends StatelessWidget {
           body: Container(
             margin: const EdgeInsets.only(top: 100),
             child: PageView(
+              physics: const NeverScrollableScrollPhysics(),
               onPageChanged: (i) {
                 controller.changePage(i);
               },
@@ -38,7 +39,8 @@ class Home extends StatelessWidget {
             ),
           ),
           floatingActionButton: Visibility(
-            visible: MediaQuery.of(context).viewInsets.bottom == 0,
+            visible: controller.currentPage != 1 &&
+                MediaQuery.of(context).viewInsets.bottom == 0,
             child: const FabBtn(),
           ),
           bottomNavigationBar: Container(
@@ -64,10 +66,6 @@ class Home extends StatelessWidget {
                       icon: const Icon(Icons.qr_code_rounded),
                       title: const Text("Generate"),
                     ),
-                    // SalomonBottomBarItem(
-                    //   icon: const Icon(Icons.settings),
-                    //   title: const Text("Settings"),
-                    // ),
                   ],
                 ),
               ),

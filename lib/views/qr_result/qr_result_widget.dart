@@ -1,4 +1,3 @@
-import 'package:ai_barcode/ai_barcode.dart';
 import 'package:dencode/constant/hive_box_name.dart';
 import 'package:dencode/constant/image_path.dart';
 import 'package:dencode/controller/date_time.dart';
@@ -18,7 +17,7 @@ class QrResultWidget extends StatelessWidget {
 
   final DateTimeController date = DateTimeController();
   final ShowPopUp showPopUp = ShowPopUp();
-  final CreatorController creatorController = CreatorController();
+  // final CreatorController creatorController = CreatorController();
   final DbController dbController = DbController();
   final qrResult = Hive.box<QrData>(HiveBoxName.kQrDataBox);
   @override
@@ -54,13 +53,13 @@ class QrResultWidget extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  showPopUp.qrViewPopUp(
-                                    data: result.qrData,
-                                    context: context,
-                                    width: width,
-                                    height: height,
-                                    creatorController: creatorController,
-                                  );
+                                  // showPopUp.qrViewPopUp(
+                                  //   data: result.qrData,
+                                  //   context: context,
+                                  //   width: width,
+                                  //   height: height,
+                                  //   creatorController: creatorController,
+                                  // );
                                 },
                                 child: Container(
                                   height: 40,

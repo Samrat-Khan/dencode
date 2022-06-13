@@ -1,4 +1,4 @@
-import 'package:ai_barcode/ai_barcode.dart';
+// import 'package:ai_barcode/ai_barcode.dart';
 import 'package:dencode/controller/pop_up_controller.dart';
 import 'package:dencode/widgets/loader.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class ShowPopUp {
     required BuildContext context,
     required double width,
     required double height,
-    required CreatorController creatorController,
+    // required CreatorController creatorController,
   }) {
     return showDialog(
       context: context,
@@ -38,10 +38,7 @@ class ShowPopUp {
                   builder: (controller) {
                     return Visibility(
                       visible: controller.isVisibleQrCode.value,
-                      child: PlatformAiBarcodeCreatorWidget(
-                        creatorController: creatorController,
-                        initialValue: data,
-                      ),
+                      child: SizedBox(),
                       replacement: const Padding(
                         padding: EdgeInsets.all(25),
                         child: Loader(),
