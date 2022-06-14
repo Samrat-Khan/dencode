@@ -12,6 +12,7 @@ import 'package:dencode/widgets/route_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QrScannerPage extends StatefulWidget {
@@ -22,44 +23,30 @@ class QrScannerPage extends StatefulWidget {
 }
 
 class _QrScannerPageState extends State<QrScannerPage>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   // late ScannerController _scannerController;
   final DbController dbController = DbController();
+  late final AnimationController _animationController;
+  late MobileScannerController scannerController;
+  bool _flashOn = false;
+  bool _flipCamera = false;
   Random ran = Random();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // _scannerController = ScannerController(scannerResult: (result) {
-    //   dbController.addQrResult(
-    //     data: QrData(
-    //       qrData: result,
-    //       dateStamp: DateTime.now(),
-    //       uuid: DateTime.now().microsecondsSinceEpoch,
-    //       colorCode: ColorCodes
-    //           .kColorCodes[ran.nextInt(ColorCodes.kColorCodes.length)],
-    //     ),
-    //   );
-    //   _resultCallback(result);
-    // }, scannerViewCreated: () {
-    //   TargetPlatform platform = Theme.of(context).platform;
-    //   if (TargetPlatform.iOS == platform) {
-    //     Future.delayed(const Duration(seconds: 2), () {
-    //       _scannerController.startCamera();
-    //       _scannerController.startCameraPreview();
-    //     });
-    //   } else {
-    //     _scannerController.startCamera();
-    //     _scannerController.startCameraPreview();
-    //   }
-    // });
+    scannerController = MobileScannerController(
+      torchEnabled: _flashOn,
+      formats: [
+        BarcodeFormat.all,
+      ],
+    );
+    _animationController = AnimationController(vsync: this);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    // _scannerController.stopCameraPreview();
-    // _scannerController.stopCamera();
     super.dispose();
   }
 
@@ -77,7 +64,30 @@ class _QrScannerPageState extends State<QrScannerPage>
     }
   }
 
+  swicthFlash() {
+    setState(() {
+      _flashOn = !_flashOn;
+    });
+    scannerController.toggleTorch();
+  }
+
+  swicthCamera() {
+    setState(() {
+      _flipCamera = !_flipCamera;
+    });
+    scannerController.switchCamera();
+  }
+
   _resultCallback(String result) {
+    dbController.addQrResult(
+      data: QrData(
+        qrData: result,
+        dateStamp: DateTime.now(),
+        uuid: DateTime.now().microsecondsSinceEpoch,
+        colorCode:
+            ColorCodes.kColorCodes[ran.nextInt(ColorCodes.kColorCodes.length)],
+      ),
+    );
     return showDialog(
       barrierDismissible: false,
       context: context,
@@ -104,7 +114,7 @@ class _QrScannerPageState extends State<QrScannerPage>
                     onPressed: () {
                       Navigator.of(context).pushReplacement(
                         createRoute(
-                          nextPage: Home(),
+                          nextPage: const Home(),
                         ),
                       );
                     },
@@ -131,19 +141,89 @@ class _QrScannerPageState extends State<QrScannerPage>
           init.controller!.requestCameraPermission();
         },
         builder: (controller) {
-          return controller.isLoading.value
-              ? const Center(
-                  child: Loader(),
-                )
-              : !controller.isCameraPermissionGranted.value
-                  ? retryPermissionUi(
-                      message: controller.cameraPermissionStatusMessage.value,
-                      size: MediaQuery.of(context).size,
-                      controller: controller,
-                    )
-                  : MobileScanner(
-                      onDetect: (code, args) {},
-                    );
+          if (controller.isLoading.value) {
+            return const Center(
+              child: Loader(),
+            );
+          } else {
+            if (!controller.isCameraPermissionGranted.value) {
+              return retryPermissionUi(
+                message: controller.cameraPermissionStatusMessage.value,
+                size: MediaQuery.of(context).size,
+                controller: controller,
+              );
+            } else {
+              return SingleChildScrollView(
+                child: Container(
+                  decoration: BoxDecoration(),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: SafeArea(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.7,
+                          height: MediaQuery.of(context).size.width * 0.7,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: MobileScanner(
+                              controller: scannerController,
+                              onDetect: (code, args) {
+                                _resultCallback(code.rawValue!);
+                              },
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            InkWell(
+                              onTap: swicthFlash,
+                              child: AnimatedSwitcher(
+                                duration: const Duration(
+                                  milliseconds: 100,
+                                ),
+                                child: _flashOn
+                                    ? const Icon(
+                                        Icons.flash_on_outlined,
+                                        color: Color(0xffffc107),
+                                        size: 30,
+                                      )
+                                    : const Icon(
+                                        Icons.flash_off_rounded,
+                                        size: 30,
+                                      ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: swicthCamera,
+                              child: AnimatedSwitcher(
+                                duration: const Duration(
+                                  milliseconds: 100,
+                                ),
+                                child: _flipCamera
+                                    ? const Icon(
+                                        Icons.camera_front_rounded,
+                                        color: Color(0xffffc107),
+                                        size: 30,
+                                      )
+                                    : const Icon(
+                                        Icons.photo_camera_back_rounded,
+                                        size: 30,
+                                      ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+          }
         },
       ),
     );
