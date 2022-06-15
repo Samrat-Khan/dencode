@@ -5,38 +5,41 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
+
+  @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<NavigationController>(
       init: NavigationController(),
       builder: (controller) {
         return Scaffold(
-          extendBody: true,
-          extendBodyBehindAppBar: true,
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            title: Text(
-              "Magic QR",
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 22,
-              ),
-            ),
-          ),
-          body: Container(
-            margin: const EdgeInsets.only(top: 100),
-            child: PageView(
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (i) {
-                controller.changePage(i);
-              },
-              controller: controller.pageController,
-              children: controller.pages.toList(),
-            ),
+          // extendBody: true,
+          // extendBodyBehindAppBar: true,
+          // appBar: AppBar(
+          //   elevation: 0,
+          //   backgroundColor: Colors.transparent,
+          //   title: Text(
+          //     "Magic QR",
+          //     style: GoogleFonts.poppins(
+          //       color: Colors.black,
+          //       fontWeight: FontWeight.bold,
+          //       fontSize: 22,
+          //     ),
+          //   ),
+          // ),
+          body: PageView(
+            physics: const NeverScrollableScrollPhysics(),
+            onPageChanged: (i) {
+              controller.changePage(i);
+            },
+            controller: controller.pageController,
+            children: controller.pages.toList(),
           ),
           floatingActionButton: Visibility(
             visible: controller.currentPage != 1 &&

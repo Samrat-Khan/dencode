@@ -6,13 +6,10 @@ import 'package:dencode/constant/permission_message.dart';
 import 'package:dencode/controller/db_controller.dart';
 import 'package:dencode/controller/permission_controller.dart';
 import 'package:dencode/db/qr_data.dart';
-import 'package:dencode/views/home/home.dart';
 import 'package:dencode/widgets/loader.dart';
-import 'package:dencode/widgets/route_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class QrScannerPage extends StatefulWidget {
@@ -48,6 +45,12 @@ class _QrScannerPageState extends State<QrScannerPage>
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  stopCamera() async {
+    await scannerController.stop();
+    scannerController.dispose();
+    Navigator.of(context).pop();
   }
 
   @override
@@ -111,12 +114,8 @@ class _QrScannerPageState extends State<QrScannerPage>
                 SizedBox(
                   height: 40,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushReplacement(
-                        createRoute(
-                          nextPage: const Home(),
-                        ),
-                      );
+                    onPressed: () async {
+                      await stopCamera();
                     },
                     child: Text(
                       "Done",

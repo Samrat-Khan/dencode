@@ -24,112 +24,114 @@ class QrResultWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-    return ValueListenableBuilder(
-      valueListenable: qrResult.listenable(),
-      builder: (context, Box<QrData> data, _) {
-        return data.isEmpty
-            ? const ShowEmptyWidget()
-            : ListView.builder(
-                itemCount: data.length,
-                shrinkWrap: true,
-                itemBuilder: (ctx, i) {
-                  final result = qrResult.getAt(i);
-                  return Card(
-                    elevation: 5,
-                    color: Color(result!.colorCode),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 10),
-                      alignment: Alignment.centerLeft,
-                      decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  // showPopUp.qrViewPopUp(
-                                  //   data: result.qrData,
-                                  //   context: context,
-                                  //   width: width,
-                                  //   height: height,
-                                  //   creatorController: creatorController,
-                                  // );
-                                },
-                                child: Container(
-                                  height: 40,
-                                  width: 40,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(ImagePath.kQrCode),
+    return Scaffold(
+      body: ValueListenableBuilder(
+        valueListenable: qrResult.listenable(),
+        builder: (context, Box<QrData> data, _) {
+          return data.isEmpty
+              ? const ShowEmptyWidget()
+              : ListView.builder(
+                  itemCount: data.length,
+                  shrinkWrap: true,
+                  itemBuilder: (ctx, i) {
+                    final result = qrResult.getAt(i);
+                    return Card(
+                      elevation: 5,
+                      color: Color(result!.colorCode),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    // showPopUp.qrViewPopUp(
+                                    //   data: result.qrData,
+                                    //   context: context,
+                                    //   width: width,
+                                    //   height: height,
+                                    //   creatorController: creatorController,
+                                    // );
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 40,
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(ImagePath.kQrCode),
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 20),
-                              SizedBox(
-                                width: width * 0.6,
-                                child: Text(
-                                  result.qrData,
+                                const SizedBox(width: 20),
+                                SizedBox(
+                                  width: width * 0.6,
+                                  child: Text(
+                                    result.qrData,
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                                const Spacer(),
+                                IconButton(
+                                  onPressed: () {
+                                    dbController.removeQrResult(index: i);
+                                  },
+                                  icon: const AssetsIcons(
+                                      imagePath: ImagePath.kDelete),
+                                  padding: EdgeInsets.zero,
+                                  constraints: const BoxConstraints(),
+                                ),
+                              ],
+                            ),
+                            const Divider(
+                              color: Colors.white,
+                              thickness: 0.5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  date.fullDate(
+                                    date: result.dateStamp,
+                                  ),
                                   style: GoogleFonts.poppins(
                                     fontWeight: FontWeight.w500,
                                     color: Colors.white,
                                   ),
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
                                 ),
-                              ),
-                              const Spacer(),
-                              IconButton(
-                                onPressed: () {
-                                  dbController.removeQrResult(index: i);
-                                },
-                                icon: const AssetsIcons(
-                                    imagePath: ImagePath.kDelete),
-                                padding: EdgeInsets.zero,
-                                constraints: const BoxConstraints(),
-                              ),
-                            ],
-                          ),
-                          const Divider(
-                            color: Colors.white,
-                            thickness: 0.5,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                date.fullDate(
-                                  date: result.dateStamp,
+                                Text(
+                                  date.fullTime(
+                                    time: result.dateStamp,
+                                  ),
+                                  style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.white,
+                                  ),
                                 ),
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                date.fullTime(
-                                  time: result.dateStamp,
-                                ),
-                                style: GoogleFonts.poppins(
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              );
-      },
+                    );
+                  },
+                );
+        },
+      ),
     );
   }
 }
