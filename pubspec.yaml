@@ -10,23 +10,27 @@ environment:
   sdk: ">=2.16.1 <3.0.0"
 
 dependencies:
-  # ai_barcode: ^3.0.1
   cupertino_icons: ^1.0.2
-  # flex_color_scheme: ^5.0.1
+  # dotted_border: ^2.0.0+2
   flutter:
     sdk: flutter
+  # future_progress_dialog: ^0.2.0
   get: ^4.6.1
   google_fonts: ^2.3.1
   hive: ^2.1.0
   hive_flutter: ^1.1.0
-  iconsax: ^0.0.8
+  # iconsax: ^0.0.8
   intl: ^0.17.0
   loading_animation_widget: ^1.1.0+3
   mobile_scanner: ^2.0.0
+  path_provider: ^2.0.11
   permission_handler: ^9.2.0
   qr_flutter: ^4.0.0
   salomon_bottom_bar: ^3.3.1
-  speed_dial_fab: ^2.1.1
+  screenshot: ^1.2.3
+  # share: ^2.0.4
+  share_plus: ^4.0.8
+  # speed_dial_fab: ^2.1.1
   unicons: ^2.0.2
 
 dev_dependencies:

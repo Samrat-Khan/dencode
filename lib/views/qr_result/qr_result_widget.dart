@@ -25,6 +25,17 @@ class QrResultWidget extends StatelessWidget {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          "Magic QR",
+          style: GoogleFonts.poppins(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: ValueListenableBuilder(
         valueListenable: qrResult.listenable(),
         builder: (context, Box<QrData> data, _) {
@@ -54,13 +65,12 @@ class QrResultWidget extends StatelessWidget {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    // showPopUp.qrViewPopUp(
-                                    //   data: result.qrData,
-                                    //   context: context,
-                                    //   width: width,
-                                    //   height: height,
-                                    //   creatorController: creatorController,
-                                    // );
+                                    showPopUp.qrViewPopUp(
+                                      data: result.qrData,
+                                      context: context,
+                                      width: width,
+                                      height: height,
+                                    );
                                   },
                                   child: Container(
                                     height: 40,

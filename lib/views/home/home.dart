@@ -19,8 +19,8 @@ class _HomeState extends State<Home> {
       init: NavigationController(),
       builder: (controller) {
         return Scaffold(
-          // extendBody: true,
-          // extendBodyBehindAppBar: true,
+          extendBody: true,
+          extendBodyBehindAppBar: true,
           // appBar: AppBar(
           //   elevation: 0,
           //   backgroundColor: Colors.transparent,

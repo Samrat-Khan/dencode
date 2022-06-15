@@ -1,9 +1,11 @@
 // import 'package:ai_barcode/ai_barcode.dart';
 import 'package:dencode/controller/pop_up_controller.dart';
+import 'package:dencode/db/qr_data.dart';
 import 'package:dencode/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class ShowPopUp {
   qrViewPopUp({
@@ -11,7 +13,6 @@ class ShowPopUp {
     required BuildContext context,
     required double width,
     required double height,
-    // required CreatorController creatorController,
   }) {
     return showDialog(
       context: context,
@@ -38,7 +39,11 @@ class ShowPopUp {
                   builder: (controller) {
                     return Visibility(
                       visible: controller.isVisibleQrCode.value,
-                      child: SizedBox(),
+                      child: Center(
+                        child: QrImage(
+                          data: data,
+                        ),
+                      ),
                       replacement: const Padding(
                         padding: EdgeInsets.all(25),
                         child: Loader(),

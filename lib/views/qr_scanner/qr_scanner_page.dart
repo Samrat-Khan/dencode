@@ -6,6 +6,7 @@ import 'package:dencode/constant/permission_message.dart';
 import 'package:dencode/controller/db_controller.dart';
 import 'package:dencode/controller/permission_controller.dart';
 import 'package:dencode/db/qr_data.dart';
+import 'package:dencode/views/home/home.dart';
 import 'package:dencode/widgets/loader.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,28 +51,35 @@ class _QrScannerPageState extends State<QrScannerPage>
   stopCamera() async {
     await scannerController.stop();
     scannerController.dispose();
-    Navigator.of(context).pop();
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const Home()), (route) => false);
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     switch (state) {
       case AppLifecycleState.resumed:
+        await scannerController.start();
         break;
       case AppLifecycleState.inactive:
+        await scannerController.stop();
         break;
       case AppLifecycleState.paused:
+        await scannerController.stop();
         break;
       case AppLifecycleState.detached:
+        await scannerController.stop();
         break;
     }
   }
 
   swicthFlash() {
-    setState(() {
-      _flashOn = !_flashOn;
-    });
-    scannerController.toggleTorch();
+    if (!_flipCamera) {
+      setState(() {
+        _flashOn = !_flashOn;
+      });
+      scannerController.toggleTorch();
+    }
   }
 
   swicthCamera() {
@@ -79,6 +87,13 @@ class _QrScannerPageState extends State<QrScannerPage>
       _flipCamera = !_flipCamera;
     });
     scannerController.switchCamera();
+    if (_flashOn) {
+      if (_flipCamera) {
+        setState(() {
+          _flashOn = false;
+        });
+      }
+    }
   }
 
   _resultCallback(String result) {
@@ -99,8 +114,8 @@ class _QrScannerPageState extends State<QrScannerPage>
           builder: (context, state) {
             return SimpleDialog(
               contentPadding: const EdgeInsets.symmetric(
-                horizontal: 10,
-                vertical: 10,
+                horizontal: 20,
+                vertical: 20,
               ),
               children: [
                 SelectableText(
@@ -154,65 +169,90 @@ class _QrScannerPageState extends State<QrScannerPage>
             } else {
               return SingleChildScrollView(
                 child: Container(
-                  decoration: BoxDecoration(),
+                  decoration: const BoxDecoration(),
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   child: SafeArea(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                    child: Stack(
+                      alignment: Alignment.center,
                       children: [
                         SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          height: MediaQuery.of(context).size.width * 0.7,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: MobileScanner(
-                              controller: scannerController,
-                              onDetect: (code, args) {
-                                _resultCallback(code.rawValue!);
-                              },
-                            ),
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height,
+                          child: MobileScanner(
+                            controller: scannerController,
+                            onDetect: (code, args) {},
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            InkWell(
-                              onTap: swicthFlash,
-                              child: AnimatedSwitcher(
-                                duration: const Duration(
-                                  milliseconds: 100,
-                                ),
-                                child: _flashOn
-                                    ? const Icon(
-                                        Icons.flash_on_outlined,
-                                        color: Color(0xffffc107),
-                                        size: 30,
-                                      )
-                                    : const Icon(
-                                        Icons.flash_off_rounded,
-                                        size: 30,
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              height: MediaQuery.of(context).size.width * 0.7,
+                              child: Center(
+                                child: CustomPaint(
+                                  painter: BorderPainter(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: MobileScanner(
+                                        controller: scannerController,
+                                        onDetect: (code, args) {
+                                          _resultCallback(code.rawValue!);
+                                        },
                                       ),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                            InkWell(
-                              onTap: swicthCamera,
-                              child: AnimatedSwitcher(
-                                duration: const Duration(
-                                  milliseconds: 100,
+                            const SizedBox(height: 20),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: swicthFlash,
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(
+                                      milliseconds: 100,
+                                    ),
+                                    child: _flashOn
+                                        ? const Icon(
+                                            Icons.flash_on_outlined,
+                                            color: Color(0xffffc107),
+                                            size: 30,
+                                          )
+                                        : const Icon(
+                                            Icons.flash_off_rounded,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                  ),
                                 ),
-                                child: _flipCamera
-                                    ? const Icon(
-                                        Icons.camera_front_rounded,
-                                        color: Color(0xffffc107),
-                                        size: 30,
-                                      )
-                                    : const Icon(
-                                        Icons.photo_camera_back_rounded,
-                                        size: 30,
-                                      ),
-                              ),
+                                const SizedBox(width: 40),
+                                InkWell(
+                                  onTap: swicthCamera,
+                                  child: AnimatedSwitcher(
+                                    duration: const Duration(
+                                      milliseconds: 100,
+                                    ),
+                                    child: _flipCamera
+                                        ? const Icon(
+                                            Icons.camera_front_rounded,
+                                            color: Color(0xffffc107),
+                                            size: 30,
+                                          )
+                                        : const Icon(
+                                            Icons.photo_camera_back_rounded,
+                                            color: Colors.white,
+                                            size: 30,
+                                          ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -303,5 +343,65 @@ class _QrScannerPageState extends State<QrScannerPage>
         ),
       ),
     );
+  }
+}
+
+class BorderPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    const double width = 3.0;
+    const double radius = 20.0;
+    const tRadius = 2 * radius;
+    final rect = Rect.fromLTWH(
+      width,
+      width,
+      size.width - 2 * width,
+      size.height - 2 * width,
+    );
+    final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(radius));
+    Rect clippingRect0 = const Rect.fromLTWH(
+      0,
+      0,
+      tRadius,
+      tRadius,
+    );
+    final clippingRect1 = Rect.fromLTWH(
+      size.width - tRadius,
+      0,
+      tRadius,
+      tRadius,
+    );
+    final clippingRect2 = Rect.fromLTWH(
+      0,
+      size.height - tRadius,
+      tRadius,
+      tRadius,
+    );
+    final clippingRect3 = Rect.fromLTWH(
+      size.width - tRadius,
+      size.height - tRadius,
+      tRadius,
+      tRadius,
+    );
+
+    final path = Path()
+      ..addRect(clippingRect0)
+      ..addRect(clippingRect1)
+      ..addRect(clippingRect2)
+      ..addRect(clippingRect3);
+
+    canvas.clipPath(path);
+    canvas.drawRRect(
+      rrect,
+      Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = width,
+    );
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }
