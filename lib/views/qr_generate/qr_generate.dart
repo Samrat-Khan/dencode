@@ -26,180 +26,160 @@ class _QrGenerateState extends State<QrGenerate> {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      body: CustomScrollView(
-        shrinkWrap: true,
-        slivers: [
-          SliverAppBar(
-            backgroundColor: Colors.white,
-            elevation: 0,
-            floating: true,
-            pinned: true,
-            title: Text(
-              "Magic QR",
-              style: GoogleFonts.poppins(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
+    return GetBuilder<QrGenerateController>(
+      init: QrGenerateController(),
+      initState: (_) {},
+      builder: (controller) {
+        return SafeArea(
+          left: false,
+          right: false,
+          bottom: false,
+          child: Container(
+            width: width,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextField(
+                    controller: controller.qrGenerateTextEditingController,
+                    onChanged: (val) {
+                      controller.setInputValue(val);
+                    },
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Screenshot(
+                    controller: _screenshotController,
+                    child: SizedBox(
+                      height: width * 0.45,
+                      child: Center(
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: QrImage(
+                              gapless: false,
+                              data: controller.initValue,
+                              dataModuleStyle: QrDataModuleStyle(
+                                dataModuleShape: controller.qrDataShape,
+                                color: Color(controller.qrDataShapeColor!),
+                              ),
+                              eyeStyle: QrEyeStyle(
+                                eyeShape: controller.eyeShape,
+                                color: Color(controller.eyeColor!),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.share,
+                            size: 25,
+                          ),
+                          onPressed: () async {
+                            await shareQrCode();
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "QR Inside Styling",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomTxtBtn(
+                        title: "Square",
+                        onTap: () {
+                          controller.updateQrDataShape(0);
+                        },
+                      ),
+                      const SizedBox(width: 20),
+                      CustomTxtBtn(
+                        title: "Circle",
+                        onTap: () {
+                          controller.updateQrDataShape(1);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  ListOfColorWidgets(
+                    itemCount: controller.colorCode.length,
+                    colorCodes: controller.colorCode,
+                    onTap: (int i) {
+                      controller.updateQrDataShapesColor(i);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    "QR Corner Styling",
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomTxtBtn(
+                        title: "Square",
+                        onTap: () {
+                          controller.updateEyeDataShape(1);
+                        },
+                      ),
+                      const SizedBox(width: 20),
+                      CustomTxtBtn(
+                        title: "Circle",
+                        onTap: () {
+                          controller.updateEyeDataShape(0);
+                        },
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  ListOfColorWidgets(
+                    itemCount: controller.colorCode.length,
+                    colorCodes: controller.colorCode,
+                    onTap: (int i) {
+                      controller.updateEyeShapesColor(i);
+                    },
+                  ),
+                  const SizedBox(height: 100),
+                ],
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: GetBuilder<QrGenerateController>(
-              init: QrGenerateController(),
-              initState: (_) {},
-              builder: (controller) {
-                return Container(
-                  width: width,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller:
-                              controller.qrGenerateTextEditingController,
-                          onChanged: (val) {
-                            controller.setInputValue(val);
-                          },
-                          decoration: InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Screenshot(
-                          controller: _screenshotController,
-                          child: SizedBox(
-                            height: width * 0.45,
-                            child: Center(
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: QrImage(
-                                    gapless: false,
-                                    data: controller.initValue,
-                                    dataModuleStyle: QrDataModuleStyle(
-                                      dataModuleShape: controller.qrDataShape,
-                                      color:
-                                          Color(controller.qrDataShapeColor!),
-                                    ),
-                                    eyeStyle: QrEyeStyle(
-                                      eyeShape: controller.eyeShape,
-                                      color: Color(controller.eyeColor!),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              child: IconButton(
-                                icon: const Icon(
-                                  Icons.share,
-                                  size: 25,
-                                ),
-                                onPressed: () async {
-                                  await shareQrCode();
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          "QR Inside Styling",
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomTxtBtn(
-                              title: "Square",
-                              onTap: () {
-                                controller.updateQrDataShape(0);
-                              },
-                            ),
-                            const SizedBox(width: 20),
-                            CustomTxtBtn(
-                              title: "Circle",
-                              onTap: () {
-                                controller.updateQrDataShape(1);
-                              },
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        ListOfColorWidgets(
-                          itemCount: controller.colorCode.length,
-                          colorCodes: controller.colorCode,
-                          onTap: (int i) {
-                            controller.updateQrDataShapesColor(i);
-                          },
-                        ),
-                        const SizedBox(height: 20),
-                        Text(
-                          "QR Corner Styling",
-                          style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomTxtBtn(
-                              title: "Square",
-                              onTap: () {
-                                controller.updateEyeDataShape(1);
-                              },
-                            ),
-                            const SizedBox(width: 20),
-                            CustomTxtBtn(
-                              title: "Circle",
-                              onTap: () {
-                                controller.updateEyeDataShape(0);
-                              },
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        ListOfColorWidgets(
-                          itemCount: controller.colorCode.length,
-                          colorCodes: controller.colorCode,
-                          onTap: (int i) {
-                            controller.updateEyeShapesColor(i);
-                          },
-                        ),
-                        const SizedBox(height: 100),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 

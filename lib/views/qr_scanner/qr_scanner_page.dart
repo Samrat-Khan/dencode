@@ -200,7 +200,8 @@ class _QrScannerPageState extends State<QrScannerPage>
                                       borderRadius: BorderRadius.circular(20),
                                       child: MobileScanner(
                                         controller: scannerController,
-                                        onDetect: (code, args) {
+                                        onDetect: (code, args) async {
+                                          await scannerController.stop();
                                           _resultCallback(code.rawValue!);
                                         },
                                       ),

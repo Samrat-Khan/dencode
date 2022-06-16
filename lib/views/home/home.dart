@@ -21,26 +21,26 @@ class _HomeState extends State<Home> {
         return Scaffold(
           extendBody: true,
           extendBodyBehindAppBar: true,
-          // appBar: AppBar(
-          //   elevation: 0,
-          //   backgroundColor: Colors.transparent,
-          //   title: Text(
-          //     "Magic QR",
-          //     style: GoogleFonts.poppins(
-          //       color: Colors.black,
-          //       fontWeight: FontWeight.bold,
-          //       fontSize: 22,
-          //     ),
-          //   ),
-          // ),
-          body: PageView(
-            physics: const NeverScrollableScrollPhysics(),
-            onPageChanged: (i) {
-              controller.changePage(i);
-            },
-            controller: controller.pageController,
-            children: controller.pages.toList(),
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: Text(
+              "Magic QR",
+              style: GoogleFonts.poppins(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
+          // body: PageView.builder(
+          //   physics: const NeverScrollableScrollPhysics(),
+          //   onPageChanged: (i) {
+          //     controller.changePage(i);
+          //   },
+          //   controller: controller.pageController,
+          //   itemBuilder: (_, i) => controller.pages[i],
+          // ),
+          body: controller.pages[controller.currentPage],
           floatingActionButton: Visibility(
             visible: controller.currentPage != 1 &&
                 MediaQuery.of(context).viewInsets.bottom == 0,

@@ -29,6 +29,7 @@ class PermissionController extends GetxController {
             PermissionMessage.kPermissionDeniedParmanent;
       }
     }
+    update();
   }
 
   givePermissionFromSettings() async {

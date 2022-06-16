@@ -10,21 +10,20 @@ class NavigationController extends GetxController {
     const QrGenerate(),
     // const Settings(),
   ];
-
-  PageController pageController =
-      PageController(initialPage: 0, keepPage: true);
+  // PageController pageController =
+  //     PageController(initialPage: 0, keepPage: true);
   int currentPage = 0;
   changePage(int index) {
     currentPage = index;
-    pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
+    // pageController.animateToPage(index,
+    //     duration: const Duration(milliseconds: 100), curve: Curves.easeIn);
 
     update();
   }
 
   @override
   void onClose() {
-    pageController.dispose();
+    // pageController.dispose();
 
     super.onClose();
   }
