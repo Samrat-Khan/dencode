@@ -3,29 +3,31 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionController extends GetxController {
-  RxBool isLoading = true.obs;
-  RxBool isCameraPermissionGranted = false.obs;
-  RxString cameraPermissionStatusMessage = ''.obs;
+  bool isLoading = true;
+  bool isCameraPermissionGranted = false;
+  String cameraPermissionStatusMessage = '';
   Future<void> requestCameraPermission() async {
     final serviceStatus = await Permission.camera.isGranted;
-    final status = await Permission.camera.request();
+
     if (serviceStatus) {
-      isLoading.value = false;
-      isCameraPermissionGranted.value = true;
+      isLoading = false;
+      isCameraPermissionGranted = true;
     } else {
-      if (status == PermissionStatus.granted) {
-        isLoading.value = false;
-        isCameraPermissionGranted.value = true;
+      final status = await Permission.camera.request();
+      if (status.isGranted) {
+        isLoading = false;
+        isCameraPermissionGranted = true;
         //  cameraPermissionStatusMessage.value= PermissionMessage.kPermissionGranted;
-      } else if (status == PermissionStatus.denied) {
-        isLoading.value = false;
-        isCameraPermissionGranted.value = false;
-        cameraPermissionStatusMessage.value =
-            PermissionMessage.kPermissionDenied;
-      } else if (status == PermissionStatus.permanentlyDenied) {
-        isLoading.value = false;
-        isCameraPermissionGranted.value = false;
-        cameraPermissionStatusMessage.value =
+      }
+      if (status == PermissionStatus.denied) {
+        isLoading = false;
+        isCameraPermissionGranted = false;
+        cameraPermissionStatusMessage = PermissionMessage.kPermissionDenied;
+      }
+      if (status == PermissionStatus.permanentlyDenied) {
+        isLoading = false;
+        isCameraPermissionGranted = false;
+        cameraPermissionStatusMessage =
             PermissionMessage.kPermissionDeniedParmanent;
       }
     }
@@ -34,5 +36,11 @@ class PermissionController extends GetxController {
 
   givePermissionFromSettings() async {
     await openAppSettings();
+  }
+
+  @override
+  void onInit() {
+    requestCameraPermission();
+    super.onInit();
   }
 }

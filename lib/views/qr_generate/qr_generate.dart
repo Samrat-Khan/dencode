@@ -1,10 +1,12 @@
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:dencode/controller/qr_generate_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -103,6 +105,21 @@ class _QrGenerateState extends State<QrGenerate> {
                           },
                         ),
                       ),
+                      const SizedBox(width: 20),
+                      Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.save_alt_rounded,
+                            size: 25,
+                          ),
+                          onPressed: () async {
+                            await saveToGallery();
+                          },
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 20),
@@ -119,14 +136,14 @@ class _QrGenerateState extends State<QrGenerate> {
                       CustomTxtBtn(
                         title: "Square",
                         onTap: () {
-                          controller.updateQrDataShape(0);
+                          controller.updateQrDataShape(1);
                         },
                       ),
                       const SizedBox(width: 20),
                       CustomTxtBtn(
                         title: "Circle",
                         onTap: () {
-                          controller.updateQrDataShape(1);
+                          controller.updateQrDataShape(0);
                         },
                       ),
                     ],
@@ -198,6 +215,25 @@ class _QrGenerateState extends State<QrGenerate> {
           final imagePath = await File('${directory.path}/image.png').create();
           await imagePath.writeAsBytes(image);
           await Share.shareFiles([imagePath.path]);
+        }
+      },
+    );
+  }
+
+  saveToGallery() async {
+    if (!await Permission.storage.isGranted) {
+      await Permission.storage.request();
+    }
+    Permission.storage.request();
+    await _screenshotController
+        .capture(delay: const Duration(milliseconds: 10))
+        .then(
+      (Uint8List? image) async {
+        if (image != null) {
+          await ImageGallerySaver.saveImage(Uint8List.fromList(image),
+              quality: 100,
+              name:
+                  "QrImage-${DateTime.now().hashCode + Random().nextInt(9999)}");
         }
       },
     );
