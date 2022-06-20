@@ -1,17 +1,9 @@
-import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
-
 import 'package:dencode/controller/qr_generate_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:path_provider/path_provider.dart' as path;
-import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:screenshot/screenshot.dart';
-import 'package:share_plus/share_plus.dart';
 
 class QrGenerate extends StatefulWidget {
   const QrGenerate({Key? key}) : super(key: key);
@@ -22,9 +14,7 @@ class QrGenerate extends StatefulWidget {
 
 class _QrGenerateState extends State<QrGenerate> {
   final ScreenshotController _screenshotController = ScreenshotController();
-  Uint8List? _imageFile;
-  bool _saveImage = false;
-  bool _shareImage = false;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -59,68 +49,97 @@ class _QrGenerateState extends State<QrGenerate> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Screenshot(
-                    controller: _screenshotController,
-                    child: SizedBox(
-                      height: width * 0.45,
-                      child: Center(
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: QrImage(
-                              gapless: false,
-                              data: controller.initValue,
-                              dataModuleStyle: QrDataModuleStyle(
-                                dataModuleShape: controller.qrDataShape,
-                                color: Color(controller.qrDataShapeColor!),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Screenshot(
+                        controller: _screenshotController,
+                        child: SizedBox(
+                          height: width * 0.45,
+                          child: Center(
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                              eyeStyle: QrEyeStyle(
-                                eyeShape: controller.eyeShape,
-                                color: Color(controller.eyeColor!),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: QrImage(
+                                  gapless: false,
+                                  data: controller.initValue,
+                                  embeddedImage: controller.fileImage == null
+                                      ? null
+                                      : FileImage(controller.fileImage!),
+                                  embeddedImageStyle: QrEmbeddedImageStyle(
+                                    size: const Size.fromRadius(10),
+                                  ),
+                                  dataModuleStyle: QrDataModuleStyle(
+                                    dataModuleShape: controller.qrDataShape,
+                                    color: Color(controller.qrDataShapeColor!),
+                                  ),
+                                  eyeStyle: QrEyeStyle(
+                                    eyeShape: controller.eyeShape,
+                                    color: Color(controller.eyeColor!),
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.share,
-                            size: 25,
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.share,
+                                size: 25,
+                              ),
+                              onPressed: () async {
+                                await controller.shareQrCode(
+                                    screenshotController:
+                                        _screenshotController);
+                              },
+                            ),
                           ),
-                          onPressed: () async {
-                            await shareQrCode();
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.save_alt_rounded,
-                            size: 25,
+                          const SizedBox(width: 20),
+                          Card(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(50),
+                            ),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.save_alt_rounded,
+                                size: 25,
+                              ),
+                              onPressed: () async {
+                                await controller.saveToGallery(
+                                  context: context,
+                                  screenshotController: _screenshotController,
+                                );
+                              },
+                            ),
                           ),
-                          onPressed: () async {
-                            await saveToGallery();
-                          },
-                        ),
+                        ],
                       ),
                     ],
+                  ),
+                  const SizedBox(width: 20),
+                  TextButton.icon(
+                    onPressed: () async {
+                      await controller.addCustomImage();
+                    },
+                    label: Text(
+                      "Add Image",
+                      style: GoogleFonts.poppins(color: Colors.black),
+                    ),
+                    icon: const Icon(
+                      Icons.add_a_photo_outlined,
+                      color: Colors.black,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Text(
@@ -196,45 +215,6 @@ class _QrGenerateState extends State<QrGenerate> {
             ),
           ),
         );
-      },
-    );
-  }
-
-  shareQrCode() async {
-    if (!await Permission.storage.isGranted) {
-      await Permission.storage.request();
-    }
-    Permission.storage.request();
-    await _screenshotController
-        .capture(delay: const Duration(milliseconds: 10))
-        .then(
-      (Uint8List? image) async {
-        if (image != null) {
-          final directory = await path.getApplicationDocumentsDirectory();
-
-          final imagePath = await File('${directory.path}/image.png').create();
-          await imagePath.writeAsBytes(image);
-          await Share.shareFiles([imagePath.path]);
-        }
-      },
-    );
-  }
-
-  saveToGallery() async {
-    if (!await Permission.storage.isGranted) {
-      await Permission.storage.request();
-    }
-    Permission.storage.request();
-    await _screenshotController
-        .capture(delay: const Duration(milliseconds: 10))
-        .then(
-      (Uint8List? image) async {
-        if (image != null) {
-          await ImageGallerySaver.saveImage(Uint8List.fromList(image),
-              quality: 100,
-              name:
-                  "QrImage-${DateTime.now().hashCode + Random().nextInt(9999)}");
-        }
       },
     );
   }
